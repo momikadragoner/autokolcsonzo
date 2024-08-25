@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreReservationRequest;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
@@ -65,19 +66,9 @@ class ReservationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request):  RedirectResponse
+    public function store(StoreReservationRequest $request):  RedirectResponse
     {
-        $validated = $request->validate([
-            'car_id' => 'required',
-            'name' => 'required|string',
-            'email' => 'required|string',
-            'phone' => 'required|string',
-            'address' => 'required|string',
-            'date_begin' => 'required|date',
-            'date_end' => 'required|date',
-            'days_reserved' => 'required|integer',
-            'total_price' => 'required|integer',
-        ]);
+        $validated = $request->validated();
 
         Car::findOrFail($request->car_id)->reservations()->create($validated);
 
